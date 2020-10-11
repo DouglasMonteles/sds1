@@ -2,6 +2,8 @@ package com.devsuperior.dspesquisa.services;
 
 import java.time.Instant;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,12 @@ public class RecordService {
 		entity = recordRepository.save(entity);
 		
 		return  new RecordDTO(entity);
+	}
+
+	@Transactional(readOnly = true)
+	public Page<RecordDTO> findByMoments(Instant minDate, Instant maxDate, PageRequest request) {
+		return recordRepository.findByMoments(minDate, maxDate, request)
+				.map(record -> new RecordDTO(record));
 	}
 	
 }
