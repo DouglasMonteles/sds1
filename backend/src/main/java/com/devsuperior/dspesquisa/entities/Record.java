@@ -22,7 +22,7 @@ public class Record implements Serializable {
 	private Long id;
 	private String name;
 	private Integer age;
-	private Instant monent;
+	private Instant moment;
 	
 	@ManyToOne
 	@JoinColumn(name = "game_id")
@@ -30,12 +30,12 @@ public class Record implements Serializable {
 	
 	public Record() {}
 
-	public Record(Long id, String name, Integer age, Instant monent, Game game) {
+	public Record(Long id, String name, Integer age, Instant moment, Game game) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.age = age;
-		this.monent = monent;
+		this.moment = moment;
 		this.game = game;
 	}
 
@@ -65,12 +65,12 @@ public class Record implements Serializable {
 		this.age = age;
 	}
 
-	public Instant getMonent() {
-		return monent;
+	public Instant getMoment() {
+		return moment;
 	}
 
-	public void setMonent(Instant monent) {
-		this.monent = monent;
+	public void setMonent(Instant moment) {
+		this.moment = moment;
 	}
 
 	public Game getGame() {
