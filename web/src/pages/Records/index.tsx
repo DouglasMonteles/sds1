@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import api from '../../services/api.service';
 
 import './styles.css';
 
+import { RecordsResponse } from './type';
+import { formateDate } from './helpers';
+
 const Records = () => {
+  const [recordsResponse, setRecordsResponse] = useState<RecordsResponse>();
+
+  useEffect(() => {
+    api.get('records?linesPerPage=12')
+      .then((response) => {
+        setRecordsResponse(response.data);
+      });
+  }, []);
+
   return (
     <div className="page-contanier">
       <table className="records-table" cellPadding={0} cellSpacing={0}>
@@ -18,41 +31,16 @@ const Records = () => {
         </thead>
 
         <tbody>
-          <tr>
-            <td>20/08/2020 13:45</td>
-            <td>Douglas Monteles</td>
-            <td>25</td>
-            <td>XBOX</td>
-            <td>Ação - Aventura</td>
-            <td>The Last Of US</td>
-          </tr>
-
-          <tr>
-            <td>20/08/2020 13:45</td>
-            <td>Douglas Monteles</td>
-            <td>25</td>
-            <td>XBOX</td>
-            <td>Ação - Aventura</td>
-            <td>The Last Of US</td>
-          </tr>
-
-          <tr>
-            <td>20/08/2020 13:45</td>
-            <td>Douglas Monteles</td>
-            <td>25</td>
-            <td>XBOX</td>
-            <td>Ação - Aventura</td>
-            <td>The Last Of US</td>
-          </tr>
-
-          <tr>
-            <td>20/08/2020 13:45</td>
-            <td>Douglas Monteles</td>
-            <td>25</td>
-            <td>XBOX</td>
-            <td>Ação - Aventura</td>
-            <td>The Last Of US</td>
-          </tr>
+          {recordsResponse?.content.map(record => (
+            <tr key={record.id}>
+              <td>{formateDate(record.moment)}</td>
+              <td>{record.name}</td>
+              <td>{record.age}</td>
+              <td className="text-secondary">{record.gamePlatform}</td>
+              <td>{record.genreName}</td>
+              <td className="text-primary">{record.gameTitle}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

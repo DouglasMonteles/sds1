@@ -10,7 +10,8 @@
 }
  
 .records-table {
-  width: 100%;
+  width: 90%;
+  margin: 10px auto;
   border-bottom: 10px solid var(--color-turquoise);
   border-radius: 0 0 10px 10px;
 }
