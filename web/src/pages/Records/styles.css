@@ -55,11 +55,12 @@
 }
 
 .filters-container {
+  width: 87vw;
   background-color: var(--color-darkslategray);
   display: flex;
   justify-content: space-between;
   padding: 13px 15px;
-  margin-bottom: 25px;
+  margin: 15px auto;
   border-radius: 10px;
 }
 

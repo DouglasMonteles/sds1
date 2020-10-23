@@ -6,18 +6,34 @@ import './styles.css';
 import { RecordsResponse } from './type';
 import { formateDate } from './helpers';
 
+import Pagination from './Pagination';
+import { Link } from 'react-router-dom';
+
 const Records = () => {
   const [recordsResponse, setRecordsResponse] = useState<RecordsResponse>();
+  const [activePage, setActivePage] = useState(0); 
 
   useEffect(() => {
-    api.get('records?linesPerPage=12')
+    api.get(`records?linesPerPage=12&page=${activePage}`)
       .then((response) => {
         setRecordsResponse(response.data);
       });
-  }, []);
+  }, [activePage]);
+
+  const handlePageChange = (index: number) => {
+    setActivePage(index);
+  }
 
   return (
     <div className="page-contanier">
+      <div className="filters-container records-actions">
+        <Link to="/charts">
+          <button className="action-filters">
+            VER GRÁFICOS
+          </button>
+        </Link>
+      </div>
+
       <table className="records-table" cellPadding={0} cellSpacing={0}>
         <thead>
           <tr>
@@ -43,6 +59,12 @@ const Records = () => {
           ))}
         </tbody>
       </table>
+
+      <Pagination 
+        activePage={activePage}
+        totalPages={recordsResponse?.totalPages}
+        goToPage={handlePageChange}
+      />
     </div>
   );
 }
