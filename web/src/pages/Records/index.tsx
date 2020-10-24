@@ -7,7 +7,7 @@ import { RecordsResponse } from './type';
 import { formateDate } from './helpers';
 
 import Pagination from './Pagination';
-import { Link } from 'react-router-dom';
+import Filters from '../../components/Filters';
 
 const Records = () => {
   const [recordsResponse, setRecordsResponse] = useState<RecordsResponse>();
@@ -26,13 +26,10 @@ const Records = () => {
 
   return (
     <div className="page-contanier">
-      <div className="filters-container records-actions">
-        <Link to="/charts">
-          <button className="action-filters">
-            VER GRÁFICOS
-          </button>
-        </Link>
-      </div>
+      <Filters 
+        link="/charts"
+        linkText="VER GRÁFICO"
+      />
 
       <table className="records-table" cellPadding={0} cellSpacing={0}>
         <thead>
