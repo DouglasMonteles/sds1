@@ -3,9 +3,17 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { FontAwesome as Icon } from '@expo/vector-icons';
 
+import Header from '../../components/Header';
+
 const Home = () => {
+
+  function handleNavigation() {
+    
+  }
+
   return (
     <>
+      <Header />
       <View style={styles.container}>
         <Image
           style={styles.gamerImage}
@@ -17,7 +25,7 @@ const Home = () => {
       </View>
 
       <View style={styles.footer}>
-        <RectButton style={styles.button}>
+        <RectButton style={styles.button} onPress={handleNavigation}>
           <Text style={styles.buttonText}>
             COLETAR DADOS
           </Text>
