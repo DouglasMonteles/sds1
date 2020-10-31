@@ -2,13 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { FontAwesome as Icon } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 import Header from '../../components/Header';
 
 const Home = () => {
+  const navigation = useNavigation();
 
-  function handleNavigation() {
-    
+  const handleCreateRecord = () => {
+    navigation.navigate('CreateRecord');
   }
 
   return (
@@ -25,7 +27,7 @@ const Home = () => {
       </View>
 
       <View style={styles.footer}>
-        <RectButton style={styles.button} onPress={handleNavigation}>
+        <RectButton style={styles.button} onPress={handleCreateRecord}>
           <Text style={styles.buttonText}>
             COLETAR DADOS
           </Text>
