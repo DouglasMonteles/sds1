@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput, Text, ScrollView, Alert } from 'react-native';
 import Header from '../../components/Header';
 import PlatformCard from './PlatformCard';
 import RNPickerSelect from 'react-native-picker-select';
@@ -7,6 +7,7 @@ import { FontAwesome5 as Icon } from '@expo/vector-icons';
 
 import { GamePlatform, Game } from './types';
 import api from '../../services/api';
+import { RectButton } from 'react-native-gesture-handler';
 
 const placeholder = {
   label: 'Selecione o Game',
@@ -15,8 +16,8 @@ const placeholder = {
 
 const mapSelectValues = (games: Game[]) => {
   return games.map(game => (
-    { 
-      ...game, 
+    {
+      ...game,
       label: game.title,
       value: game.id,
     }
@@ -24,6 +25,8 @@ const mapSelectValues = (games: Game[]) => {
 };
 
 const CreateRecord = () => {
+  const [nome, setName] = useState('');
+  const [age, setAge] = useState('');
   const [platform, setPlatform] = useState<GamePlatform>();
   const [selectedGame, setSelectedGame] = useState('');
   const [allGames, setAllGames] = useState<Game[]>([]);
@@ -38,69 +41,85 @@ const CreateRecord = () => {
   }
 
   useEffect(() => {
-    api.get('games').then(response => {
+    api.get('/games').then(response => {
       const selectValues = mapSelectValues(response.data);
       setAllGames(selectValues);
     })
   }, []);
 
+  const handleSubmit = () => {
+    const payload = {name, age, gameId: selectedGame};
+    
+    api.post('/records', payload).then(() => {
+      Alert.alert('Dados salvos com sucesso!!!');
+    });
+  }
+
   return (
     <>
       <Header />
 
-      <View style={styles.container}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Nome"
-          placeholderTextColor="#9E9E9E"
-        />
-
-        <TextInput
-          style={styles.inputText}
-          placeholder="Idade"
-          keyboardType="numeric"
-          placeholderTextColor="#9E9E9E"
-          maxLength={3}
-        />
-
-        <View style={styles.platformContainer}>
-          <PlatformCard
-            platform="PC"
-            icon="laptop"
-            onChange={handleChangePlatform}
-            activePlatform={platform}
+      <ScrollView>
+        <View style={styles.container}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Nome"
+            placeholderTextColor="#9E9E9E"
+            onChangeText={setName}
           />
 
-          <PlatformCard
-            platform="XBOX"
-            icon="xbox"
-            onChange={handleChangePlatform}
-            activePlatform={platform}
+          <TextInput
+            style={styles.inputText}
+            placeholder="Idade"
+            keyboardType="numeric"
+            placeholderTextColor="#9E9E9E"
+            maxLength={3}
+            onChangeText={setAge}
           />
 
-          <PlatformCard
-            platform="PLAYSTATION"
-            icon="playstation"
-            onChange={handleChangePlatform}
-            activePlatform={platform}
-          />
-        </View>
+          <View style={styles.platformContainer}>
+            <PlatformCard
+              platform="PC"
+              icon="laptop"
+              onChange={handleChangePlatform}
+              activePlatform={platform}
+            />
 
-        <RNPickerSelect
-          onValueChange={setSelectedGame}
-          placeholder={placeholder}
-          items={filteredGames}
-          style={pickerSelectStyles}
-          value={selectedGame}
-          Icon={() => {
-            return (
-              <Icon name="chevron-down" color="#9E9E9E" size={25} />
+            <PlatformCard
+              platform="XBOX"
+              icon="xbox"
+              onChange={handleChangePlatform}
+              activePlatform={platform}
+            />
+
+            <PlatformCard
+              platform="PLAYSTATION"
+              icon="playstation"
+              onChange={handleChangePlatform}
+              activePlatform={platform}
+            />
+          </View>
+
+          <RNPickerSelect
+            onValueChange={setSelectedGame}
+            placeholder={placeholder}
+            items={filteredGames}
+            style={pickerSelectStyles}
+            value={selectedGame}
+            Icon={() => {
+              return (
+                <Icon name="chevron-down" color="#9E9E9E" size={25} />
               );
             }}
-        >
+          />
 
-        </RNPickerSelect>
-      </View>
+          <View style={styles.footer}>
+            <RectButton style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>SALVAR</Text>
+            </RectButton>
+          </View>
+        </View>
+      </ScrollView>
     </>
   );
 }
