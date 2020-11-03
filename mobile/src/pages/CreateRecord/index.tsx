@@ -1,24 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 import Header from '../../components/Header';
 import PlatformCard from './PlatformCard';
 import RNPickerSelect from 'react-native-picker-select';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
 
-import { GamePlatform } from './types';
+import { GamePlatform, Game } from './types';
+import api from '../../services/api';
 
 const placeholder = {
   label: 'Selecione o Game',
   value: null,
 };
 
+const mapSelectValues = (games: Game[]) => {
+  return games.map(game => (
+    { 
+      ...game, 
+      label: game.title,
+      value: game.id,
+    }
+  ));
+};
+
 const CreateRecord = () => {
   const [platform, setPlatform] = useState<GamePlatform>();
   const [selectedGame, setSelectedGame] = useState('');
+  const [allGames, setAllGames] = useState<Game[]>([]);
+  const [filteredGames, setFilteredGames] = useState<Game[]>([]);
 
   const handleChangePlatform = (selectedPlatform: GamePlatform) => {
     setPlatform(selectedPlatform);
+    const gamesByPlatform = allGames.filter(
+      game => game.platform === selectedPlatform,
+    );
+    setFilteredGames(gamesByPlatform);
   }
+
+  useEffect(() => {
+    api.get('games').then(response => {
+      const selectValues = mapSelectValues(response.data);
+      setAllGames(selectValues);
+    })
+  }, []);
 
   return (
     <>
@@ -65,15 +89,14 @@ const CreateRecord = () => {
         <RNPickerSelect
           onValueChange={setSelectedGame}
           placeholder={placeholder}
-          items={[
-            { label: 'Football', value: 'football' },
-          ]}
+          items={filteredGames}
+          style={pickerSelectStyles}
+          value={selectedGame}
           Icon={() => {
             return (
               <Icon name="chevron-down" color="#9E9E9E" size={25} />
               );
             }}
-          style={pickerSelectStyles}
         >
 
         </RNPickerSelect>
