@@ -25,7 +25,7 @@ const mapSelectValues = (games: Game[]) => {
 };
 
 const CreateRecord = () => {
-  const [nome, setName] = useState('');
+  const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [platform, setPlatform] = useState<GamePlatform>();
   const [selectedGame, setSelectedGame] = useState('');
@@ -41,18 +41,32 @@ const CreateRecord = () => {
   }
 
   useEffect(() => {
-    api.get('/games').then(response => {
-      const selectValues = mapSelectValues(response.data);
-      setAllGames(selectValues);
-    })
+    api.get('/games')
+      .then(response => {
+        const selectValues = mapSelectValues(response.data);
+        setAllGames(selectValues);
+      })
+      .catch((error) => {
+        Alert.alert('Erro na requisição!');
+        console.log(error);
+      })
   }, []);
 
   const handleSubmit = () => {
     const payload = {name, age, gameId: selectedGame};
     
-    api.post('/records', payload).then(() => {
-      Alert.alert('Dados salvos com sucesso!!!');
-    });
+    api.post('/records', payload)
+      .then(() => {
+        Alert.alert('Dados salvos com sucesso!!!');
+        setName('');
+        setAge('');
+        setSelectedGame('');
+        setPlatform(undefined);
+      })
+      .catch((error) => {
+        Alert.alert('Erro ao salvar!');
+        console.log(error);
+      })
   }
 
   return (
@@ -66,6 +80,7 @@ const CreateRecord = () => {
             placeholder="Nome"
             placeholderTextColor="#9E9E9E"
             onChangeText={setName}
+            value={name}
           />
 
           <TextInput
@@ -75,6 +90,7 @@ const CreateRecord = () => {
             placeholderTextColor="#9E9E9E"
             maxLength={3}
             onChangeText={setAge}
+            value={age}
           />
 
           <View style={styles.platformContainer}>
