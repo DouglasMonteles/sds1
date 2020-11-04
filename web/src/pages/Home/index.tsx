@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import './styles.css';
-
 import arrowRightIcon from '../../assets/arrow-right.png';
 import gamerImg from '../../assets/gamer.png';
+
+import './styles.css';
 
 const Home = () => {
   return (
