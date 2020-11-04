@@ -17,3 +17,9 @@ Back End, React no Front End e ReactNative no mobile. O projeto consiste em exib
 - Javascript
 - Typescript
 - Java
+
+## Acesse a versão web da aplicação
+
+```console
+https://sds1-monteles.netlify.app/
+```
